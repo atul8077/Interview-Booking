@@ -1,24 +1,24 @@
 import Link from 'next/link';
-import { ArrowRight, CalendarCheck, Users, Video } from 'lucide-react';
+import { ArrowRight, BookOpen, Briefcase, GraduationCap, Users, Landmark } from 'lucide-react';
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-full">
       {/* Hero Section */}
       <section className="flex-grow flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-zinc-900 dark:to-zinc-950 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
-            Master Your Next <span className="text-blue-600 dark:text-blue-500">Tech Interview</span>
+            The Ultimate <span className="text-blue-600 dark:text-blue-500">Mock Interview</span> Platform
           </h1>
-          <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto">
-            Schedule 1-on-1 mock interviews with industry experts. Get real-time feedback and boost your confidence.
+          <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-10 max-w-3xl mx-auto">
+            Practice with top industry experts. Whether you are preparing for a Tech role, UPSC Civil Services, or HR rounds, we have the right mentors for you.
           </p>
           <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
             <Link 
-              href="/dashboard" 
+              href="#categories" 
               className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
             >
-              Book an Interview
+              Explore Categories
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link 
@@ -31,41 +31,78 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white dark:bg-zinc-950 px-4 sm:px-6 lg:px-8">
+      {/* Categories Section */}
+      <section id="categories" className="py-20 bg-white dark:bg-zinc-950 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-16">How It Works</h2>
-          <div className="grid md:grid-cols-3 gap-12">
+          <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-4">Choose Your Field</h2>
+          <p className="text-center text-slate-600 dark:text-slate-400 mb-12 max-w-2xl mx-auto">Select a category below to see available mock interviews and mentors.</p>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            <div className="text-center">
-              <div className="bg-blue-100 dark:bg-blue-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            {/* Technical */}
+            <Link href="/category/technical" className="group">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-blue-500">
+                <div className="bg-blue-100 dark:bg-blue-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">Technical & IT</h3>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Practice coding, system design, Java, PHP, React, and more with top engineers.
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">1. Choose an Interview</h3>
-              <p className="text-slate-600 dark:text-slate-400">
-                Browse our selection of specialized interview categories like Java, React, or System Design.
-              </p>
-            </div>
+            </Link>
 
-            <div className="text-center">
-              <div className="bg-purple-100 dark:bg-purple-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <CalendarCheck className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+            {/* UPSC */}
+            <Link href="/category/upsc" className="group">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-purple-500">
+                <div className="bg-purple-100 dark:bg-purple-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Landmark className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">UPSC & Civil Services</h3>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Mock personality tests with retired IAS officers and subject matter experts.
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">2. Schedule a Time</h3>
-              <p className="text-slate-600 dark:text-slate-400">
-                Pick a date and time that works best for you from our real-time availability calendar.
-              </p>
-            </div>
+            </Link>
 
-            <div className="text-center">
-              <div className="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Video className="h-8 w-8 text-green-600 dark:text-green-400" />
+            {/* HR / Behavioral */}
+            <Link href="/category/hr" className="group">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-green-500">
+                <div className="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Users className="h-8 w-8 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">HR & Behavioral</h3>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Perfect your soft skills, leadership principles, and cultural fit interviews.
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">3. Join via Zoom</h3>
-              <p className="text-slate-600 dark:text-slate-400">
-                Get your personalized Zoom link and connect face-to-face with your interviewer.
-              </p>
-            </div>
+            </Link>
+
+            {/* Teaching */}
+            <Link href="/category/teaching" className="group">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-orange-500">
+                <div className="bg-orange-100 dark:bg-orange-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <GraduationCap className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">Teaching & Academia</h3>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Demo lectures and academic interview prep with experienced professors.
+                </p>
+              </div>
+            </Link>
+
+            {/* Management */}
+            <Link href="/category/management" className="group">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-red-500">
+                <div className="bg-red-100 dark:bg-red-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Briefcase className="h-8 w-8 text-red-600 dark:text-red-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">Management & MBA</h3>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Case study practice and product management interviews with top PMs.
+                </p>
+              </div>
+            </Link>
 
           </div>
         </div>

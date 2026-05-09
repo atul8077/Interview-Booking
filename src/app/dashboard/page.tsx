@@ -1,16 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Calendar as CalendarIcon, Clock, CheckCircle2, ChevronRight, Video } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
-export default function DashboardPage() {
-  const [interviews] = useState([
-    { id: 1, title: "Java Backend Developer", duration: 60, description: "Core Java, Spring Boot, Microservices.", icon: "☕" },
-    { id: 2, title: "React Frontend Developer", duration: 45, description: "React, Next.js, Tailwind CSS.", icon: "⚛️" },
-    { id: 3, title: "System Design", duration: 90, description: "Scalability, Database Design, Architecture.", icon: "🏗️" }
-  ]);
+// Mock database
+const categoryData: Record<string, { title: string; description: string; subs: { id: string, title: string, icon: string, desc: string }[] }> = {
+  technical: {
+    title: "Technical & IT",
+    description: "",
+    subs: [
+      { id: "java", title: "Java Backend", icon: "☕", desc: "Spring Boot, Microservices, Core Java." },
+      { id: "php", title: "PHP Developer", icon: "🐘", desc: "Laravel, CodeIgniter, Core PHP." },
+      { id: "react", title: "Frontend React", icon: "⚛️", desc: "Next.js, Redux, Tailwind CSS." },
+      { id: "system-design", title: "System Design", icon: "🏗️", desc: "Scalability, DB Architecture." },
+    ]
+  },
+  upsc: {
+    title: "UPSC & Civil Services",
+    description: "",
+    subs: [
+      { id: "ias", title: "IAS Mock Interview", icon: "🏛️", desc: "Comprehensive UPSC Board mock." },
+      { id: "state-pcs", title: "State PCS", icon: "📝", desc: "State-specific administrative mock." },
+      { id: "daf", title: "DAF Analysis", icon: "📄", desc: "Detailed Application Form discussion." },
+    ]
+  },
+  hr: {
+    title: "HR & Behavioral",
+    description: "",
+    subs: [
+      { id: "behavioral", title: "Behavioral Round", icon: "🤝", desc: "STAR method, leadership principles." },
+      { id: "managerial", title: "Managerial Fit", icon: "👔", desc: "Conflict resolution, team management." },
+    ]
+  },
+  teaching: {
+    title: "Teaching & Academia",
+    description: "",
+    subs: [
+      { id: "demo-class", title: "Demo Class Mock", icon: "🏫", desc: "Present a topic to a mock student panel." },
+      { id: "academic-panel", title: "Academic Panel", icon: "🎓", desc: "Research discussion, teaching philosophy." },
+    ]
+  },
+  management: {
+    title: "Management & MBA",
+    description: "",
+    subs: [
+      { id: "product-management", title: "Product Management", icon: "📱", desc: "Product design, metrics, strategy." },
+      { id: "consulting", title: "Consulting Case", icon: "📊", desc: "Business case studies, guesstimates." },
+    ]
+  }
+};
 
-  const [selectedInterview, setSelectedInterview] = useState<number | null>(null);
+function DashboardContent() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const subParam = searchParams.get('sub');
+
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [isBooked, setIsBooked] = useState(false);
@@ -19,35 +65,37 @@ export default function DashboardPage() {
     { id: 201, title: "Java Backend Developer", date: "2026-05-15", time: "10:00 AM", zoomLink: "https://zoom.us/j/987654321" }
   ]);
 
+  let selectedSub = null;
+  if (categoryParam && subParam && categoryData[categoryParam]) {
+    selectedSub = categoryData[categoryParam].subs.find(s => s.id === subParam);
+  }
+
   const handleBooking = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedInterview || !selectedDate || !selectedTime) return;
+    if (!selectedSub || !selectedDate || !selectedTime) return;
     
-    const interview = interviews.find(i => i.id === selectedInterview);
-    if (interview) {
-      setMyBookings([{
-        id: Date.now(),
-        title: interview.title,
-        date: selectedDate,
-        time: selectedTime,
-        zoomLink: "" // Pending admin
-      }, ...myBookings]);
-      setIsBooked(true);
-      setTimeout(() => {
-        setIsBooked(false);
-        setSelectedInterview(null);
-        setSelectedDate("");
-        setSelectedTime("");
-      }, 3000);
-    }
+    setMyBookings([{
+      id: Date.now(),
+      title: selectedSub.title,
+      date: selectedDate,
+      time: selectedTime,
+      zoomLink: "" // Pending admin
+    }, ...myBookings]);
+    
+    setIsBooked(true);
+    setTimeout(() => {
+      setIsBooked(false);
+      setSelectedDate("");
+      setSelectedTime("");
+    }, 3000);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       
       <div className="mb-10">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Welcome Back, Candidate!</h1>
-        <p className="text-slate-600 dark:text-slate-400">Ready for your next mock interview? Schedule one below.</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Book Your Interview</h1>
+        <p className="text-slate-600 dark:text-slate-400">Select an available time slot below to practice with experts.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -60,34 +108,33 @@ export default function DashboardPage() {
               <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-green-800 dark:text-green-400 mb-2">Booking Confirmed!</h2>
               <p className="text-green-700 dark:text-green-500">
-                Your interview has been scheduled. The admin will attach a Zoom link soon.
+                Your mock interview for <b>{selectedSub?.title}</b> has been scheduled. The expert will attach a Zoom link soon.
               </p>
+              <Link href="/" className="mt-6 inline-block text-blue-600 hover:underline">
+                Return to Home
+              </Link>
             </div>
           ) : (
             <div className="bg-white dark:bg-zinc-900 shadow rounded-xl p-6 border border-slate-200 dark:border-zinc-800">
-              <h2 className="text-xl font-bold mb-6">1. Select an Interview</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                {interviews.map(interview => (
-                  <div 
-                    key={interview.id} 
-                    onClick={() => setSelectedInterview(interview.id)}
-                    className={`cursor-pointer border-2 rounded-xl p-4 transition-all ${
-                      selectedInterview === interview.id 
-                      ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' 
-                      : 'border-slate-200 dark:border-zinc-700 hover:border-blue-300'
-                    }`}
-                  >
-                    <div className="text-3xl mb-2">{interview.icon}</div>
-                    <h3 className="font-bold text-lg">{interview.title}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{interview.duration} mins</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{interview.description}</p>
-                  </div>
-                ))}
-              </div>
-
-              {selectedInterview && (
+              {!selectedSub ? (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-bold mb-4">No Interview Selected</h2>
+                  <p className="mb-6 text-slate-600 dark:text-slate-400">Please go back and select a specific interview category.</p>
+                  <Link href="/#categories" className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium">
+                    Browse Categories
+                  </Link>
+                </div>
+              ) : (
                 <div className="animate-in slide-in-from-top-4 duration-300">
-                  <h2 className="text-xl font-bold mb-6 pt-6 border-t dark:border-zinc-800">2. Select Date & Time</h2>
+                  <div className="mb-8 flex items-center border-b dark:border-zinc-800 pb-6">
+                    <div className="text-5xl mr-4">{selectedSub.icon}</div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{selectedSub.title}</h2>
+                      <p className="text-slate-600 dark:text-slate-400">{selectedSub.desc}</p>
+                    </div>
+                  </div>
+
+                  <h3 className="text-lg font-bold mb-6">Select Date & Time</h3>
                   <form onSubmit={handleBooking} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
@@ -169,5 +216,13 @@ export default function DashboardPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
