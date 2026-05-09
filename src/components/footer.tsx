@@ -28,7 +28,6 @@ export function Footer() {
               <li><Link href="/" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link></li>
               <li><Link href="/#categories" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Categories</Link></li>
               <li><Link href="/dashboard" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Book Interview</Link></li>
-              <li><Link href="/admin" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Admin Portal</Link></li>
             </ul>
           </div>
 

@@ -21,12 +21,6 @@ export default function Home() {
               Explore Categories
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
-            <Link 
-              href="/admin" 
-              className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white dark:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-700 text-slate-900 dark:text-white border border-slate-200 dark:border-zinc-700 rounded-full font-semibold text-base md:text-lg transition-all shadow-sm"
-            >
-              I am an Admin
-            </Link>
           </div>
         </div>
       </section>
