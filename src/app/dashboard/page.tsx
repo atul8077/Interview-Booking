@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { Calendar as CalendarIcon, Clock, CheckCircle2, ChevronRight, Video, Mail, User } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -11,13 +11,20 @@ function DashboardContent() {
   const categoryParam = searchParams.get('category');
   const subParam = searchParams.get('sub');
 
-  const { isLoaded, categories, bookings, addBooking } = useMockDb();
+  const { isLoaded, categories, bookings, addBooking, currentUser } = useMockDb();
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [candidateName, setCandidateName] = useState("");
   const [candidateEmail, setCandidateEmail] = useState("");
   const [isBooked, setIsBooked] = useState(false);
+
+  useEffect(() => {
+    if (currentUser) {
+      setCandidateName(currentUser.name);
+      setCandidateEmail(currentUser.email);
+    }
+  }, [currentUser]);
 
   if (!isLoaded) return <div className="p-10 text-center">Loading...</div>;
 
@@ -96,6 +103,16 @@ function DashboardContent() {
                   </div>
 
                   <h3 className="text-lg font-bold mb-6">Enter Your Details & Select Date/Time</h3>
+                  
+                  {!currentUser && (
+                    <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/50 rounded-lg flex items-center justify-between">
+                      <p className="text-sm text-yellow-800 dark:text-yellow-500 font-medium">You must be logged in to book an interview.</p>
+                      <Link href="/login" className="text-sm bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md font-bold transition-colors">
+                        Log In
+                      </Link>
+                    </div>
+                  )}
+
                   <form onSubmit={handleBooking} className="space-y-6">
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -156,7 +173,8 @@ function DashboardContent() {
                     
                     <button 
                       type="submit" 
-                      className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center"
+                      disabled={!currentUser}
+                      className={`w-full sm:w-auto px-8 py-3 text-white rounded-lg font-bold transition-colors flex items-center justify-center ${currentUser ? 'bg-blue-600 hover:bg-blue-700' : 'bg-slate-400 dark:bg-zinc-700 cursor-not-allowed'}`}
                     >
                       Confirm Booking <ChevronRight className="ml-2 w-5 h-5" />
                     </button>

@@ -24,6 +24,13 @@ export type Booking = {
   zoomLink: string;
 };
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  password?: string;
+};
+
 const defaultCategories: Record<string, Category> = {
   technical: {
     title: "Technical & IT",
@@ -78,9 +85,10 @@ export function useMockDb() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [categories, setCategories] = useState<Record<string, Category>>({});
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Load from local storage or set defaults
     const storedCategories = localStorage.getItem('ib_categories');
     if (storedCategories) {
       setCategories(JSON.parse(storedCategories));
@@ -96,6 +104,16 @@ export function useMockDb() {
       setBookings(defaultBookings);
       localStorage.setItem('ib_bookings', JSON.stringify(defaultBookings));
     }
+
+    const storedUsers = localStorage.getItem('ib_users');
+    if (storedUsers) {
+      setUsers(JSON.parse(storedUsers));
+    }
+
+    const storedSession = localStorage.getItem('ib_session');
+    if (storedSession) {
+      setCurrentUser(JSON.parse(storedSession));
+    }
     
     setIsLoaded(true);
   }, []);
@@ -108,6 +126,21 @@ export function useMockDb() {
   const saveBookings = (newBookings: Booking[]) => {
     setBookings(newBookings);
     localStorage.setItem('ib_bookings', JSON.stringify(newBookings));
+  };
+
+  const saveUsers = (newUsers: User[]) => {
+    setUsers(newUsers);
+    localStorage.setItem('ib_users', JSON.stringify(newUsers));
+  };
+
+  const loginUser = (user: User) => {
+    setCurrentUser(user);
+    localStorage.setItem('ib_session', JSON.stringify(user));
+  };
+
+  const logoutUser = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('ib_session');
   };
 
   const addBooking = (booking: Booking) => {
@@ -138,6 +171,11 @@ export function useMockDb() {
     isLoaded,
     categories,
     bookings,
+    users,
+    currentUser,
+    saveUsers,
+    loginUser,
+    logoutUser,
     saveCategories,
     saveBookings,
     addBooking,
