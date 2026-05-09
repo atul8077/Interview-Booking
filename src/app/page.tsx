@@ -7,23 +7,23 @@ export default function Home() {
       {/* Hero Section */}
       <section className="flex-grow flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-zinc-900 dark:to-zinc-950 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4 md:mb-6 leading-tight">
             The Ultimate <span className="text-blue-600 dark:text-blue-500">Mock Interview</span> Platform
           </h1>
-          <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-10 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl lg:text-2xl text-slate-600 dark:text-slate-300 mb-8 md:mb-10 max-w-3xl mx-auto px-2">
             Practice with top industry experts. Whether you are preparing for a Tech role, UPSC Civil Services, or HR rounds, we have the right mentors for you.
           </p>
           <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
             <Link 
               href="#categories" 
-              className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
+              className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold text-base md:text-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
             >
               Explore Categories
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link 
               href="/admin" 
-              className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-700 text-slate-900 dark:text-white border border-slate-200 dark:border-zinc-700 rounded-full font-semibold text-lg transition-all shadow-sm"
+              className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white dark:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-700 text-slate-900 dark:text-white border border-slate-200 dark:border-zinc-700 rounded-full font-semibold text-base md:text-lg transition-all shadow-sm"
             >
               I am an Admin
             </Link>
@@ -41,7 +41,7 @@ export default function Home() {
             
             {/* Technical */}
             <Link href="/category/technical" className="group">
-              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-blue-500">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 transition-all hover:shadow-xl hover:border-blue-500">
                 <div className="bg-blue-100 dark:bg-blue-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
@@ -54,7 +54,7 @@ export default function Home() {
 
             {/* UPSC */}
             <Link href="/category/upsc" className="group">
-              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-purple-500">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 transition-all hover:shadow-xl hover:border-purple-500">
                 <div className="bg-purple-100 dark:bg-purple-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Landmark className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
@@ -67,7 +67,7 @@ export default function Home() {
 
             {/* HR / Behavioral */}
             <Link href="/category/hr" className="group">
-              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-green-500">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 transition-all hover:shadow-xl hover:border-green-500">
                 <div className="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Users className="h-8 w-8 text-green-600 dark:text-green-400" />
                 </div>
@@ -80,7 +80,7 @@ export default function Home() {
 
             {/* Teaching */}
             <Link href="/category/teaching" className="group">
-              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-orange-500">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 transition-all hover:shadow-xl hover:border-orange-500">
                 <div className="bg-orange-100 dark:bg-orange-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <GraduationCap className="h-8 w-8 text-orange-600 dark:text-orange-400" />
                 </div>
@@ -93,7 +93,7 @@ export default function Home() {
 
             {/* Management */}
             <Link href="/category/management" className="group">
-              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-8 transition-all hover:shadow-xl hover:border-red-500">
+              <div className="h-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 transition-all hover:shadow-xl hover:border-red-500">
                 <div className="bg-red-100 dark:bg-red-900/30 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Briefcase className="h-8 w-8 text-red-600 dark:text-red-400" />
                 </div>

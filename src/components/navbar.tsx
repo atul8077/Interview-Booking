@@ -10,14 +10,14 @@ export function Navbar() {
               InterviewBook
             </Link>
           </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/dashboard" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <Link href="/dashboard" className="text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
               Dashboard
             </Link>
-            <Link href="/admin" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+            <Link href="/admin" className="text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium hidden sm:inline-block">
               Admin
             </Link>
-            <Link href="/login" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors">
+            <Link href="/login" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md font-medium transition-colors">
               Login
             </Link>
           </div>
