@@ -1,93 +1,53 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { Calendar as CalendarIcon, Clock, CheckCircle2, ChevronRight, Video } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, CheckCircle2, ChevronRight, Video, Mail, User } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-
-// Mock database
-const categoryData: Record<string, { title: string; description: string; subs: { id: string, title: string, icon: string, desc: string }[] }> = {
-  technical: {
-    title: "Technical & IT",
-    description: "",
-    subs: [
-      { id: "java", title: "Java Backend", icon: "☕", desc: "Spring Boot, Microservices, Core Java." },
-      { id: "php", title: "PHP Developer", icon: "🐘", desc: "Laravel, CodeIgniter, Core PHP." },
-      { id: "react", title: "Frontend React", icon: "⚛️", desc: "Next.js, Redux, Tailwind CSS." },
-      { id: "system-design", title: "System Design", icon: "🏗️", desc: "Scalability, DB Architecture." },
-    ]
-  },
-  upsc: {
-    title: "UPSC & Civil Services",
-    description: "",
-    subs: [
-      { id: "ias", title: "IAS Mock Interview", icon: "🏛️", desc: "Comprehensive UPSC Board mock." },
-      { id: "state-pcs", title: "State PCS", icon: "📝", desc: "State-specific administrative mock." },
-      { id: "daf", title: "DAF Analysis", icon: "📄", desc: "Detailed Application Form discussion." },
-    ]
-  },
-  hr: {
-    title: "HR & Behavioral",
-    description: "",
-    subs: [
-      { id: "behavioral", title: "Behavioral Round", icon: "🤝", desc: "STAR method, leadership principles." },
-      { id: "managerial", title: "Managerial Fit", icon: "👔", desc: "Conflict resolution, team management." },
-    ]
-  },
-  teaching: {
-    title: "Teaching & Academia",
-    description: "",
-    subs: [
-      { id: "demo-class", title: "Demo Class Mock", icon: "🏫", desc: "Present a topic to a mock student panel." },
-      { id: "academic-panel", title: "Academic Panel", icon: "🎓", desc: "Research discussion, teaching philosophy." },
-    ]
-  },
-  management: {
-    title: "Management & MBA",
-    description: "",
-    subs: [
-      { id: "product-management", title: "Product Management", icon: "📱", desc: "Product design, metrics, strategy." },
-      { id: "consulting", title: "Consulting Case", icon: "📊", desc: "Business case studies, guesstimates." },
-    ]
-  }
-};
+import { useMockDb } from "@/hooks/useMockDb";
 
 function DashboardContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
   const subParam = searchParams.get('sub');
 
+  const { isLoaded, categories, bookings, addBooking } = useMockDb();
+
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [candidateName, setCandidateName] = useState("");
+  const [candidateEmail, setCandidateEmail] = useState("");
   const [isBooked, setIsBooked] = useState(false);
 
-  const [myBookings, setMyBookings] = useState([
-    { id: 201, title: "Java Backend Developer", date: "2026-05-15", time: "10:00 AM", zoomLink: "https://zoom.us/j/987654321" }
-  ]);
+  if (!isLoaded) return <div className="p-10 text-center">Loading...</div>;
 
   let selectedSub = null;
-  if (categoryParam && subParam && categoryData[categoryParam]) {
-    selectedSub = categoryData[categoryParam].subs.find(s => s.id === subParam);
+  if (categoryParam && subParam && categories[categoryParam]) {
+    selectedSub = categories[categoryParam].subs.find(s => s.id === subParam);
   }
 
   const handleBooking = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSub || !selectedDate || !selectedTime) return;
+    if (!selectedSub || !selectedDate || !selectedTime || !candidateName || !candidateEmail) return;
     
-    setMyBookings([{
+    addBooking({
       id: Date.now(),
-      title: selectedSub.title,
+      candidateName,
+      candidateEmail,
+      interviewTitle: selectedSub.title,
       date: selectedDate,
       time: selectedTime,
       zoomLink: "" // Pending admin
-    }, ...myBookings]);
+    });
     
     setIsBooked(true);
     setTimeout(() => {
       setIsBooked(false);
       setSelectedDate("");
       setSelectedTime("");
-    }, 3000);
+      setCandidateName("");
+      setCandidateEmail("");
+    }, 5000);
   };
 
   return (
@@ -110,8 +70,8 @@ function DashboardContent() {
               <p className="text-green-700 dark:text-green-500">
                 Your mock interview for <b>{selectedSub?.title}</b> has been scheduled. The expert will attach a Zoom link soon.
               </p>
-              <Link href="/" className="mt-6 inline-block text-blue-600 hover:underline">
-                Return to Home
+              <Link href="/#categories" className="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                Return to Categories
               </Link>
             </div>
           ) : (
@@ -120,7 +80,7 @@ function DashboardContent() {
                 <div className="text-center py-10">
                   <h2 className="text-xl font-bold mb-4">No Interview Selected</h2>
                   <p className="mb-6 text-slate-600 dark:text-slate-400">Please go back and select a specific interview category.</p>
-                  <Link href="/#categories" className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium">
+                  <Link href="/#categories" className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
                     Browse Categories
                   </Link>
                 </div>
@@ -131,11 +91,42 @@ function DashboardContent() {
                     <div>
                       <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{selectedSub.title}</h2>
                       <p className="text-slate-600 dark:text-slate-400">{selectedSub.desc}</p>
+                      <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-2">Duration: {selectedSub.duration || 60} minutes</p>
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-bold mb-6">Select Date & Time</h3>
+                  <h3 className="text-lg font-bold mb-6">Enter Your Details & Select Date/Time</h3>
                   <form onSubmit={handleBooking} className="space-y-6">
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium mb-2 flex items-center">
+                          <User className="w-4 h-4 mr-2" /> Full Name
+                        </label>
+                        <input 
+                          type="text" 
+                          value={candidateName}
+                          onChange={(e) => setCandidateName(e.target.value)}
+                          className="w-full px-4 py-3 border rounded-lg dark:bg-zinc-800 dark:border-zinc-700" 
+                          placeholder="John Doe"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2 flex items-center">
+                          <Mail className="w-4 h-4 mr-2" /> Email
+                        </label>
+                        <input 
+                          type="email" 
+                          value={candidateEmail}
+                          onChange={(e) => setCandidateEmail(e.target.value)}
+                          className="w-full px-4 py-3 border rounded-lg dark:bg-zinc-800 dark:border-zinc-700" 
+                          placeholder="john@example.com"
+                          required
+                        />
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium mb-2 flex items-center">
@@ -179,16 +170,19 @@ function DashboardContent() {
         {/* Right Column: My Upcoming Bookings */}
         <div className="lg:col-span-1">
           <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-6 border border-slate-200 dark:border-zinc-700 sticky top-6">
-            <h2 className="text-xl font-bold mb-6">My Upcoming Interviews</h2>
+            <h2 className="text-xl font-bold mb-6">All Bookings (Demo)</h2>
+            <p className="text-xs text-gray-500 mb-4">In a real app, this would only show the logged-in user's bookings. Since this is a demo, all bookings are shown.</p>
             
-            <div className="space-y-4">
-              {myBookings.length === 0 ? (
+            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+              {bookings.length === 0 ? (
                 <p className="text-gray-500 text-sm">No upcoming interviews.</p>
               ) : (
-                myBookings.map(booking => (
+                bookings.map(booking => (
                   <div key={booking.id} className="bg-white dark:bg-zinc-900 border dark:border-zinc-700 rounded-lg p-4 shadow-sm">
-                    <h3 className="font-bold text-slate-900 dark:text-white mb-2">{booking.title}</h3>
-                    <div className="text-sm text-slate-600 dark:text-slate-400 space-y-1 mb-4">
+                    <h3 className="font-bold text-slate-900 dark:text-white mb-1">{booking.interviewTitle}</h3>
+                    <p className="text-xs font-medium text-blue-600 mb-3">{booking.candidateName}</p>
+                    
+                    <div className="text-sm text-slate-600 dark:text-slate-400 space-y-1 mb-4 bg-slate-50 dark:bg-zinc-800/50 p-2 rounded">
                       <p className="flex items-center"><CalendarIcon className="w-3 h-3 mr-2" /> {booking.date}</p>
                       <p className="flex items-center"><Clock className="w-3 h-3 mr-2" /> {booking.time}</p>
                     </div>
